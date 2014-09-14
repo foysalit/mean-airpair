@@ -6,11 +6,13 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Article = mongoose.model('Article'),
+	Response = require('../lib/response'),
 	_ = require('lodash');
 
 /**
  * Create a article
  */
+ 
 exports.create = function(req, res) {
 	var article = new Article(req.body);
 	article.user = req.user;
@@ -73,13 +75,17 @@ exports.delete = function(req, res) {
  * List of Articles
  */
 exports.list = function(req, res) {
+    var response = new Response(res);
+    
 	Article.find().sort('-created').populate('user', 'displayName').exec(function(err, articles) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return response.error(errorHandler.getErrorMessage(err));
 		} else {
-			res.jsonp(articles);
+			return response.error("article error");
+			return response.data({
+			    data: "dummy",
+			    data2: "dummy 2"
+			});
 		}
 	});
 };

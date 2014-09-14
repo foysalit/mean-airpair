@@ -46,7 +46,11 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 		};
 
 		$scope.find = function() {
-			$scope.articles = Articles.query();
+			$http.get('articles/').done(function(res){
+			    console.log(res);
+			}).error(function(err){
+			    console.log(err);
+			});
 		};
 
 		$scope.findOne = function() {
